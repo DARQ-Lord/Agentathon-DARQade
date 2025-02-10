@@ -1,0 +1,17 @@
+Flask
+requests
+web3
+py-solc-x
+python-dotenv
+werkzeug
+qrcode[PIL]
+pydantic
+cdp-langchain
+langchain-core
+langchain-openai
+langgraph
+PyJWT
+ecdsa
+nilql
+gunicorn
+cloudinary
