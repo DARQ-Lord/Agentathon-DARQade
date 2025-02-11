@@ -1092,6 +1092,7 @@ def get_profile_tokens(user_id):
                 "Token": token["name"],
                 "Address": token["contract_address"],
                 "Symbol": token["symbol"],
+                "Network": token["network"],
                 "Balance": balance / (10**decimals),
             }
         )

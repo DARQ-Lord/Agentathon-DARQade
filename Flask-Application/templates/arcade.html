@@ -704,11 +704,41 @@
           tokenList.innerHTML = "";
           tokens.forEach(tk => {
             const li = document.createElement("li");
+            li.style.cssText = `
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              width: 100%;
+              margin-bottom: 8px;
+            `;
+            
             li.innerHTML = `
-      <span> ${tk.Token} (${tk.Symbol}): ${tk.Balance}</span>
-      <input type="number" class="withdraw-input" id="withdraw-${tk.Symbol}" value="${tk.Balance}">
-      <button class="withdraw-button" onclick="withdrawToken('${tk.Symbol}', '${tk.Address}')">Withdraw</button>
-    `;
+              <span style="
+                display: flex;
+                align-items: center;
+                min-width: 0;
+                flex: 1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              ">
+                <img src="/static/images/${tk.Network.toLowerCase()}.png" 
+                     alt="${tk.Network}" 
+                     style="width: 20px; height: 20px; flex-shrink: 0; margin-right: 5px;">
+                <span style="overflow: hidden; text-overflow: ellipsis;">
+                  ${tk.Token} (${tk.Symbol})
+                </span>
+                : ${tk.Balance}
+              </span>
+              <input type="number" class="withdraw-input" id="withdraw-${tk.Symbol}" 
+                     value="${tk.Balance}" 
+                     style="width: 100px; flex-shrink: 0;">
+              <button class="withdraw-button" 
+                      onclick="withdrawToken('${tk.Symbol}', '${tk.Address}')"
+                      style="flex-shrink: 0;">
+                Withdraw
+              </button>
+            `;
             tokenList.appendChild(li);
           });
         })
