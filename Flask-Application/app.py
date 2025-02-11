@@ -1252,7 +1252,7 @@ def withdraw_eth():
     print(f"Value: {value}")
     # Build transaction
     transaction = {
-        "to": wallet_address,
+        "to": avax_web3.to_checksum_address(wallet_address),
         "value": value,
         "gas": 21000,
         "gasPrice": avax_web3.eth.gas_price,
@@ -1271,4 +1271,4 @@ def withdraw_eth():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
