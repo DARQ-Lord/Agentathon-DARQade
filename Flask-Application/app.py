@@ -574,7 +574,15 @@ def get_games(uuid):
         revenue = 0.0
     else:
         revenue = gamedev["Total Revenue"]
-    return jsonify({"Games": games["games"], "Revenue": revenue}), 200
+    GAMES = []
+    for game in games["games"]:
+        print(game)
+        if game["status"]!="Deleted":
+            GAMES.append(game)
+    print(GAMES)
+    if GAMES == []:
+        return jsonify({"error": "Game developer not found"}), 404
+    return jsonify({"Games": GAMES, "Revenue": revenue}), 200
 
 
 @app.route("/arcade_games", methods=["GET"])
@@ -661,7 +669,40 @@ def release_game():
         201,
     )
 
-
+@app.route("/delete_game", methods=["POST"])
+def delete_game():
+    data = request.json
+    game_id = data["game_id"]
+    print(data)
+    utils.token_gen.update_config()
+    game = utils.get_game(game_id)
+    if game == {}:
+        return jsonify({"error": "Game not found."}), 404
+    utils.token_gen.update_config()
+    utils.update_game(
+        game_id,
+        game["title"],
+        game["description"],
+        game["prompt"],
+        game["winning_condition"],
+        game["cost_in_eth"],
+        game["reward_in_tokens"],
+        game["game_type"],
+        game["revenue"],
+        game["players"],
+        game["imagePath"],
+        "Deleted",
+    )
+    return (
+        jsonify(
+            {
+                "game_id": game_id,
+                "message": "Game Deleted.",
+            }
+        ),
+        201,
+    )
+ 
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.json

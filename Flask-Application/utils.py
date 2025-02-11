@@ -114,7 +114,8 @@ class NilDBAPI:
             )
 
             if response.status_code == 200:
-                return response.json().get("data", {}).get("errors", []) == []
+                print(response.json())
+                return response.json()=={}
             else:
                 print(
                     f"Failed to Delete data in {node_name}: {response.status_code} {response.text}"
@@ -1330,7 +1331,27 @@ def get_games_by_gamedev(gamedev_id: str) -> Dict:
         print(f"Error retrieving game: {str(e)}")
         return {}
 
+def delete_game(
+    uid: str,
+) -> bool:
+    """Create and store Game data across nodes."""
+    try:
+        # Generate unique Game ID
+        filter_dict = {"_id": uid}
+        # Store game data across nodes
+        success = True
+        for node_name in ["node_a", "node_b", "node_c"]:
+            if not nildb_api.data_delete(
+                node_name, schema_manager.schema_ids["Game"], filter_dict
+            ):
+                success = False
+                break
 
+        return success
+    except Exception as e:
+        print(f"Error creating game: {str(e)}")
+        return False
+    
 def get_games_by_status(status: str) -> Dict:
     """Fetch a specific game based on its title."""
     try:
